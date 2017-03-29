@@ -840,7 +840,7 @@ class Debugger {
 			trigger_error(__d('cake_dev', 'Please change the value of %s in %s to a salt value specific to your application.', '\'Security.salt\'', 'APP/Config/core.php'), E_USER_NOTICE);
 		}
 
-		if (Configure::read('Security.cipherSeed') === '76859309657453542496749683645') {
+		if (Configure::read('Security.cipherSeed') === '7685930965732432496749683645') {
 			trigger_error(__d('cake_dev', 'Please change the value of %s in %s to a numeric (digits only) seed value specific to your application.', '\'Security.cipherSeed\'', 'APP/Config/core.php'), E_USER_NOTICE);
 		}
 	}
