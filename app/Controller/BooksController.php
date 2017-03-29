@@ -11,6 +11,52 @@ class BooksController extends AppController {
 		'order' => array('created'=>'desc'),
 		'limit' => 5
 		);
+	
+	/*private function sum($cart){
+		$total = 0;
+		foreach ($cart as $book) {
+			$total += $book['quantity']*$book['sale_price'];
+		}
+		return $total;
+	}*/
+/**
+ * add_to_cart
+ * Thêm sách vào giỏ hàng
+ */	
+	public function add_to_cart($id = null){
+		if($this->request->is('post')){
+			//tìm thông tin về sản phẩm
+			$book = $this->Book->find('first', array(
+				'recursive' => -1,
+				'conditions' => array('Book.id' => $id)
+				));
+			if($this->Session->check('cart.'.$id)){
+				$item = $this->Session->read('cart.'.$id);
+				$item['quantity'] +=1;
+			}else{
+				$item = array(
+					'id' => $book['Book']['id'],
+					'title' => $book['Book']['title'],
+					'slug' => $book['Book']['slug'],
+					'sale_price' => $book['Book']['sale_price'],
+					'quantity' => 1
+				);	
+			}
+			
+			//tạo giỏ hàng và thêm sản phẩm vào trong giỏ hàng
+			$this->Session->write('cart.'.$id, $item);
+
+			//tính tổng giá trị của giỏ hàng
+			$cart = $this->Session->read('cart');
+			//$this->sum($cart);
+			$total = $this->Tool->array_sum($cart, 'quantity', 'sale_price');
+			$this->Session->write('payment.total', $total);
+
+			$this->Session->setFlash('Đã thêm quyển sách vào trong giỏ hàng!', 'default', array('class'=> 'alert alert-info'),'cart');
+			$this->redirect($this->referer());
+		}
+	}
+
 /**
  * Hàm xử lý get_keyword
  */
@@ -28,7 +74,7 @@ class BooksController extends AppController {
 	}
 
 /**
- * tìm kiếm sách trên chickenrainshop
+ * tìm kiếm sách trên Sách cũ Huế
  */	
 	public function search(){
 		$notfound = false;
@@ -75,7 +121,7 @@ class BooksController extends AppController {
 			$this->Session->delete('search_validation');
 		}
 		$this->set('notfound',$notfound);
-		$this->set('title_for_layout', 'Tìm kiếm - ChickenRainShop');
+		$this->set('title_for_layout', 'Tìm kiếm - Sách cũ Huế');
 	}
 
 /**
@@ -88,7 +134,7 @@ class BooksController extends AppController {
 		//$this->set('books', $this->paginate());
 		$books = $this->Book->latest();
 		$this->set('books',$books);
-		$this->set('title_for_layout','Home - ChickenRainShop');
+		$this->set('title_for_layout','Home - Sách cũ Huế');
 	}
 /**
  * latest_books method
@@ -108,7 +154,7 @@ class BooksController extends AppController {
 			);
 		$books = $this->paginate();
 		$this->set('books',$books);
-		$this->set('title_for_layout', 'Sách mới - ChickenRainShop');
+		$this->set('title_for_layout', 'Sách mới - Sách cũ Huế');
 	}
 
 /**
@@ -154,7 +200,7 @@ class BooksController extends AppController {
 				'Book.id <>' => $book['Book']['id'],
 				'published' => 1
 				),
-			'limit' => 5,
+			'limit' => 4,
 			'order'=> 'rand()',
 			'contain' => array(
 				'Writer'=> array('name','slug')
@@ -168,7 +214,6 @@ class BooksController extends AppController {
 			$this->set('errors',$errors);
 			$this->Session->delete('comment_errors');
 		}
-
 
 	}
 

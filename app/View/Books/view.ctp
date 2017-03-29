@@ -2,6 +2,7 @@
 	<div class="panel">
 			<h4 class="panel-heading"><i class="glyphicon glyphicon-bookmark"></i> Chi tiết
 			</h4>
+			<?php echo $this->Session->Flash('cart'); ?>
 			<div class="row"> 
 			<div class="col col-lg-3">
 		    <div class="book-thumbnail">
@@ -20,11 +21,9 @@
 					Đang cập nhật
 				<?php endif; ?>
 		        </p>
-		        
 		        <p>Giá bìa: <?php echo $this->Number->currency($book['Book']['price'],' VND',array('places'=>0,'wholePosition'=>'after')); ?></p>
 		        <p class="yourprice">Giá bán: <span class="label label-danger"><?php echo $this->Number->currency($book['Book']['sale_price'],' VND',array('places'=>0,'wholePosition'=>'after')); ?></span></p>
-		        <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ </button>
-		        
+		        <?php echo $this->Form->postLink('<i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ ', '/books/add_to_cart/'.$book['Book']['id'], array('class'=>'btn btn-primary', 'escape'=> false));?>
 		    </div>
 	 	</div>
 	 	

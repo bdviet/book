@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <?php echo $this->Html->charset(); ?>
+  <head>
+     <?php echo $this->Html->charset(); ?>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="">
 	<meta name="author" content="">
-
 	<title>
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php echo $this->Html->meta('icon'); ?>
 	<!-- Bootstrap core CSS -->
 	<?php echo $this->Html->css('bootstrap'); ?>
-	<!-- Sách cũ Huế - Sách cũ Huế.com -->
-	<?php echo $this->Html->css('book'); ?>
+	<!-- Sách cũ Huế - ChickenRain.com -->
+	<?php echo $this->Html->css('book); ?>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -25,15 +24,12 @@
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	 ?>
-
 </head>
 <body>
 <div id="container" class="container">
-  
-  
   <!-- Header -->
   	<div id="header">
-  		<!-- Main Menu - Sách cũ Huế.com -->
+  		<!-- Main Menu - ChickenRain.com -->
 	  <div class="navbar mainmenu">
 	    <div class="container">
 	      <a class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
@@ -41,17 +37,17 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </a>
-	      <?php echo $this->Html->link('Sách cũ Huế', '/', array('class'=>"navbar-brand")); ?>
+	      <?php echo $this->Html->link('Sách cũ Huế','/',array('class'=>"navbar-brand")); ?>
 	      <div class="nav-collapse collapse">
 	        <ul class="nav navbar-nav">
-	          <li class="active"><?php echo $this->Html->link('Sách mới','/sach-moi'); ?></li>
+	          <li class="active"><?php echo $this->Html->link('Sách mới','/sach-moi') ?></li>
 	          <li><a href="#ban-chay">Sách bán chạy</a></li>
 	          <li><a href="#lien-he">Liên hệ</a></li>
 	        </ul>
 	        <ul class="nav navbar-nav pull-right">
 		  		<?php 
-		  			echo $this->Form->create('Book',array('url'=>'/books/get_keyword','class'=>'navbar-form search'));
-		  			echo $this->Form->input('keyword',array('label'=>'','style'=>"width: 200px;", 'placeholder'=>"Tìm kiếm..."));
+		  			echo $this->Form->create('Book',array('url'=>'/books/get_keyword','class'=>"navbar-form search"));
+		  			echo $this->Form->input('keyword',array('label'=>'', 'style'=>"width: 200px;", 'placeholder'=>"Tìm kiếm..."));
 		  			echo $this->Form->end();
 		  		 ?>
 	        </ul>
@@ -65,32 +61,20 @@
   <div id="content">
   	<div class="row">
   		<!-- content -->
-	  	<div class="content col col-lg-9">
+	  	<div class="content col col-lg-12">
 	  		
 	  		<?php echo $this->fetch('content'); ?>
-	  	</div> <!-- end content -->
-	  	
-	  	<!-- sidebar -->
-	  	<div class="sidebar col col-lg-3">
-	  		<div class="panel panel-info">
-	  		<h4 class="panel-heading"><i class="glyphicon glyphicon-shopping-cart"></i> Giỏ hàng</h4>
-	  			<?php echo $this->element('cart'); ?>
-	  		</div>
-	  		<div class="panel">
-	  		<h4 class="panel-heading"><i class="glyphicon glyphicon-th-list"></i> Danh mục sách</h4>
-	  		<?php echo $this->element('menu_categories'); ?>
-	  		
-	  		</div>
-	  	</div> <!-- end sidebar -->
 
+	  	</div> <!-- end content -->
+
+  		</div>
   	</div>
-  </div>
-  <!-- Footer -->
+   <!-- Footer -->
 	<div id="footer">
 	  <div class="container">
 	    <p class="text-muted credit">
-	    	Giao diện thực hành khóa học <a href="http://Sách cũ Huế.com/khoa-hoc-cakephp-nang-cao">CakePHP Nâng Cao</a> - 
-	    	Bản quyền thuộc về <a href="http://Sách cũ Huế.com">Sách cũ Huế.Com</a>
+	    	Website trao đổi sách và giáo trình cũ - <a href="https://www.facebook.com/sachcuhue/?fref=ts">Sách cũ Huế</a> - 
+	    	Bản quyền thuộc về <a href="http://facebook.com/bdviet.hce">Bùi Đức Việt</a>
 	    </p>
 	  </div>
 	</div>
@@ -100,8 +84,5 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <?php echo $this->Html->script('jquery'); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
-
-<?php echo $this->element('sql_dump'); ?>
-
 </body>
 </html>
