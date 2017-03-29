@@ -35,6 +35,7 @@
 	//Router::connect('/danh-muc/:name',array('controller'=>'categories','action'=>'view'),array('pass'=>array('name')));
 	//Router::connect('/danh-muc/*',array('controller'=>'categories','action'=>'view'));
 	//////////////////////////////////////////////////////////////////////////////////
+	Router::connect('/gio-hang', array('controller'=>'books', 'action'=> 'view_cart'));
 	Router::connect('/dang-ky-tai-khoan',array('controller' =>'users','action'=>'add'));
     Router::connect('/gio-hang',array('controller' =>'books','action'=>'view_cart'));
     Router::connect('quen-mat-khau',array('controller' =>'users','action'=>'forgot_password'));

@@ -12,7 +12,7 @@
 	<!-- Bootstrap core CSS -->
 	<?php echo $this->Html->css('bootstrap'); ?>
 	<!-- Sách cũ Huế - ChickenRain.com -->
-	<?php echo $this->Html->css('book); ?>
+	<?php echo $this->Html->css('book'); ?>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -69,12 +69,12 @@
 
   		</div>
   	</div>
-   <!-- Footer -->
+    <!-- Footer -->
 	<div id="footer">
 	  <div class="container">
 	    <p class="text-muted credit">
-	    	Website trao đổi sách và giáo trình cũ - <a href="https://www.facebook.com/sachcuhue/?fref=ts">Sách cũ Huế</a> - 
-	    	Bản quyền thuộc về <a href="http://facebook.com/bdviet.hce">Bùi Đức Việt</a>
+	    	Giao diện thực hành khóa học <a href="http://chickenrain.com/khoa-hoc-cakephp-nang-cao">CakePHP Nâng Cao</a> - 
+	    	Bản quyền thuộc về <a href="http://chickenrain.com">ChickenRain.Com</a>
 	    </p>
 	  </div>
 	</div>

@@ -13,7 +13,7 @@
 		<?php $total = $this->Session->read('payment.total'); ?>
 		<p class="pricetotal"><span class="label">Tổng: <?php echo $this->Number->currency($total, ' VND', array('places'=>0, 'wholePosition'=> 'after')); ?></span></p>
 	<!-- </ul> -->
-	<button type="button" class="btn btn-primary btn-block">Xem/Cập nhật Giỏ hàng</button>
+	<?php echo $this->Html->link('Xem/Cập nhật Giỏ hàng','/gio-hang', array('class'=>"btn btn-primary btn-block")); ?>
 <?php else: ?>
 	Giỏ hàng đang rỗng!
 <?php endif ?>

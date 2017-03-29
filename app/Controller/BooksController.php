@@ -12,13 +12,14 @@ class BooksController extends AppController {
 		'limit' => 5
 		);
 	
-	/*private function sum($cart){
+/*private function sum($cart){
 		$total = 0;
 		foreach ($cart as $book) {
 			$total += $book['quantity']*$book['sale_price'];
 		}
 		return $total;
 	}*/
+
 /**
  * add_to_cart
  * Thêm sách vào giỏ hàng
@@ -56,6 +57,16 @@ class BooksController extends AppController {
 			$this->redirect($this->referer());
 		}
 	}
+/**
+ * Xem chi tiết giỏ hàng
+ */
+	public function view_cart(){
+		$this->layout = 'cart';
+		$cart = $this->Session->read('cart');
+		$payment = $this->Session->read('payment');
+		$this->set(compact('cart','payment'));
+		$this->set('title_for_layout', 'Giỏ hàng - ChickenRainShop');
+	}
 
 /**
  * Hàm xử lý get_keyword
@@ -74,7 +85,7 @@ class BooksController extends AppController {
 	}
 
 /**
- * tìm kiếm sách trên Sách cũ Huế
+ * tìm kiếm sách trên chickenrainshop
  */	
 	public function search(){
 		$notfound = false;
@@ -121,7 +132,7 @@ class BooksController extends AppController {
 			$this->Session->delete('search_validation');
 		}
 		$this->set('notfound',$notfound);
-		$this->set('title_for_layout', 'Tìm kiếm - Sách cũ Huế');
+		$this->set('title_for_layout', 'Tìm kiếm - ChickenRainShop');
 	}
 
 /**
@@ -134,7 +145,7 @@ class BooksController extends AppController {
 		//$this->set('books', $this->paginate());
 		$books = $this->Book->latest();
 		$this->set('books',$books);
-		$this->set('title_for_layout','Home - Sách cũ Huế');
+		$this->set('title_for_layout','Home - ChickenRainShop');
 	}
 /**
  * latest_books method
@@ -154,7 +165,7 @@ class BooksController extends AppController {
 			);
 		$books = $this->paginate();
 		$this->set('books',$books);
-		$this->set('title_for_layout', 'Sách mới - Sách cũ Huế');
+		$this->set('title_for_layout', 'Sách mới - ChickenRainShop');
 	}
 
 /**
