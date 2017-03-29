@@ -10,5 +10,20 @@ class ToolComponent extends Component{
 		}
 		return $total;
 	}
+
+	/**
+	 * So sánh ngày giờ $date có nằm trong một khoảng thời gian từ $start đến $end hay không
+	 */
+	public function between($date, $start, $end, $timezone = 'Asia/Ho_Chi_Minh'){
+		date_default_timezone_set($timezone);
+		$date = strtotime($date);
+		$start = strtotime($start);
+		$end = strtotime($end);
+		if($date >= $start && $date <= $end){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
  ?>

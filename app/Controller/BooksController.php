@@ -12,7 +12,21 @@ class BooksController extends AppController {
 		'limit' => 5
 		);
 	
+/**
+ * Update payment - cập nhật đơn hàng
+ */
+	private function update_payment(){
+		//tính tổng giá trị đơn hàng
+		$cart = $this->Session->read('cart');
+		$total = $this->Tool->array_sum($cart, 'quantity', 'sale_price');
+		$this->Session->write('payment.total', $total);
 
+		//kiểm tra xem có mã giảm giá hay không
+		if($this->Session->check('payment.coupon')){
+			$pay = $total - $this->Session->read('payment.discount')/100*$total;
+			$this->Session->write('payment.pay', $pay);
+		}
+	}
 /**
  * add_to_cart
  * Thêm sách vào giỏ hàng
@@ -44,6 +58,14 @@ class BooksController extends AppController {
 			$cart = $this->Session->read('cart');
 			$total = $this->Tool->array_sum($cart, 'quantity', 'sale_price');
 			$this->Session->write('payment.total', $total);
+
+			//kiểm tra xem có mã giảm giá hay không
+			if($this->Session->check('payment.coupon')){
+				$pay = $total - $this->Session->read('payment.discount')/100*$total;
+				$this->Session->write('payment.pay', $pay);
+			}
+			//hoặc gọi hàm cập nhật đơn hàng
+			//$this->update_payment();
 
 			$this->Session->setFlash('Đã thêm quyển sách vào trong giỏ hàng!', 'default', array('class'=> 'alert alert-info'),'cart');
 			$this->redirect($this->referer());
@@ -80,13 +102,33 @@ class BooksController extends AppController {
 			if(empty($cart)){
 				$this->empty_cart();
 			}else{
-				$total = $this->Tool->array_sum($cart, 'quantity', 'sale_price');
-				$this->Session->write('payment.total', $total);
+				//$total = $this->Tool->array_sum($cart, 'quantity', 'sale_price');
+				//$this->Session->write('payment.total', $total);
+				$this->update_payment();
 			}
 			$this->redirect($this->referer());
 		}
 	}
-
+/**
+ *  Cập nhật số lượng từng quyển sách trong giỏ hàng
+ */
+	public function update($id=null){
+		if($this->request->is('post')){
+			$quantity = $this->request->data['Book']['quantity'];
+			$book = $this->Session->read('cart.'.$id);
+			if(!empty($book)&&$quantity>0){
+				$book['quantity'] = round($quantity);
+				$this->Session->write('cart.'.$id, $book);
+				/*
+				$cart = $this->Session->read('cart');
+				$total = $this->Tool->array_sum($cart, 'quantity', 'sale_price');
+				$this->Session->write('payment.total', $total);*/
+				//cập nhật đơn hàng
+				$this->update_payment();
+			}
+			$this->redirect($this->referer());
+		}
+	}
 /**
  * Hàm xử lý get_keyword
  */

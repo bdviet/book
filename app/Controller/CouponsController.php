@@ -4,16 +4,8 @@ App::uses('AppController', 'Controller');
  * Coupons Controller
  *
  * @property Coupon $Coupon
- * @property PaginatorComponent $Paginator
  */
 class CouponsController extends AppController {
-
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
 
 /**
  * index method
@@ -22,7 +14,7 @@ class CouponsController extends AppController {
  */
 	public function index() {
 		$this->Coupon->recursive = 0;
-		$this->set('coupons', $this->Paginator->paginate());
+		$this->set('coupons', $this->paginate());
 	}
 
 /**
@@ -45,17 +37,39 @@ class CouponsController extends AppController {
  *
  * @return void
  */
+	
 	public function add() {
+		if ($this->request->is('post')) {
+			$code = $this->request->data['Coupon']['code'];
+			$coupon = $this->Coupon->findByCode($code);
+			if(!empty($coupon)){
+				$today = date('Y-m-d H:i:s');
+				if($this->Tool->between($today, $coupon['Coupon']['time_start'], $coupon['Coupon']['time_end'])){
+					$this->Session->write('payment.coupon', $coupon['Coupon']['code']);
+					$this->Session->write('payment.discount', $coupon['Coupon']['percent']);
+					$total = $this->Session->read('payment.total');
+					$pay = $total - $coupon['Coupon']['percent']/100*$total;
+					$this->Session->write('payment.pay', $pay);
+				}else{
+					$this->Session->setFlash('Mã giảm giá đã hết hạn!', 'default', array('class'=>'alert alert-danger'), 'coupon');	
+				}
+			}else{
+				$this->Session->setFlash('Sai mã giảm giá!', 'default', array('class'=>'alert alert-danger'), 'coupon');
+			}
+			$this->redirect($this->referer());
+		}
+	}
+	/*public function add() {
 		if ($this->request->is('post')) {
 			$this->Coupon->create();
 			if ($this->Coupon->save($this->request->data)) {
-				$this->Flash->success(__('The coupon has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The coupon has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The coupon could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The coupon could not be saved. Please, try again.'));
 			}
 		}
-	}
+	}*/
 
 /**
  * edit method
@@ -68,12 +82,12 @@ class CouponsController extends AppController {
 		if (!$this->Coupon->exists($id)) {
 			throw new NotFoundException(__('Invalid coupon'));
 		}
-		if ($this->request->is(array('post', 'put'))) {
+		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Coupon->save($this->request->data)) {
-				$this->Flash->success(__('The coupon has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The coupon has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The coupon could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The coupon could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Coupon.' . $this->Coupon->primaryKey => $id));
@@ -93,12 +107,12 @@ class CouponsController extends AppController {
 		if (!$this->Coupon->exists()) {
 			throw new NotFoundException(__('Invalid coupon'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->onlyAllow('post', 'delete');
 		if ($this->Coupon->delete()) {
-			$this->Flash->success(__('The coupon has been deleted.'));
-		} else {
-			$this->Flash->error(__('The coupon could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('Coupon deleted'));
+			$this->redirect(array('action' => 'index'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		$this->Session->setFlash(__('Coupon was not deleted'));
+		$this->redirect(array('action' => 'index'));
 	}
 }
