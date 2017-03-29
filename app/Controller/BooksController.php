@@ -7,6 +7,10 @@ App::uses('AppController', 'Controller');
  */
 class BooksController extends AppController {
 
+	public $paginate = array(
+		'order' => array('created'=>'desc'),
+		'limit' => 5
+		);
 /**
  * index method
  * hiển thị 10 quyển sách mới nhất trên trang chủ
@@ -15,31 +19,47 @@ class BooksController extends AppController {
 	public function index() {
 		//$this->Book->recursive = 0;
 		//$this->set('books', $this->paginate());
-		//truy vấn từ controller
-		$books = $this->Book->find('all',array(
-			'fields' => array('title','image','sale_price','slug'),
-			'order'=> array('created'=>'desc'),
-			'limit'=> 10,
-			'contain' => array('Writer'=>array(
-				'fields' => 'name'
-				))
-			));
+		$books = $this->Book->latest();
+		$this->set('books',$books);
+	}
+/**
+ * latest_books method
+ * hiển thị tất cả quyển sách và sắp xếp theo thứ tự từ mới đến cũ
+ * phân trang dữ liệu
+ */
+	public function latest_books(){
+		$this->paginate = array(
+			'fields' => array('id','title','slug','image','sale_price'),
+			'order' => array('created'=>'desc'),
+			'limit' => 5,
+			'contain' => array(
+				'Writer' => array('name','slug')
+				),
+			'conditions' => array('published' => 1),
+			'paramType' => 'querystring'
+			);
+		$books = $this->paginate();
 		$this->set('books',$books);
 	}
 
 /**
  * view method
- *
+ * Xem thông tin chi tiết một quyển sách
  * @throws NotFoundException
  * @param string $id
  * @return void
  */
-	public function view($id = null) {
-		if (!$this->Book->exists($id)) {
-			throw new NotFoundException(__('Invalid book'));
+	public function view($slug = null) {
+		$options = array(
+			'conditions' => array(
+				'Book.slug' => $slug
+			));
+		$book = $this->Book->find('first', $options);
+		//pr($book);
+		if (empty($book)) {
+			throw new NotFoundException(__('Không tìm thấy quyển sách này!'));
 		}
-		$options = array('conditions' => array('Book.' . $this->Book->primaryKey => $id));
-		$this->set('book', $this->Book->find('first', $options));
+		$this->set('book', $book);
 	}
 
 /**
@@ -86,14 +106,13 @@ class BooksController extends AppController {
 		}
 		$categories = $this->Book->Category->find('list');
 		$writers = $this->Book->Writer->find('list');
-		$this->set(compact('categories','writers'));
+		$this->set(compact('categories', 'writers'));
 	}
 
 /**
  * delete method
  *
  * @throws NotFoundException
- * @throws MethodNotAllowedException
  * @param string $id
  * @return void
  */

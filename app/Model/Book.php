@@ -168,4 +168,17 @@ class Book extends AppModel {
 			'insertQuery' => ''
 		)
 	);
+	public function latest(){
+		return $this->find('all',array(
+			'fields' => array('id','title','image','sale_price','slug'),
+			'order'=> array('created'=>'desc'),
+			'limit'=> 10,
+			'conditions' => array('published'=>1),
+			'contain' => array('Writer'=>array(
+				'fields' => array('name','slug')
+				))
+			));
+	}
+
 }
+

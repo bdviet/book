@@ -26,6 +26,10 @@
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
 	Router::connect('/',array('controller'=>'books','action'=>'index'));
+	Router::connect('/sach-moi',array('controller'=>'books','action'=>'latest_books'));
+	Router::connect('/tac-gia',array('controller'=>'writers','action'=>'index'));
+	Router::connect('/:book_title',array('controller'=>'books','action'=>'view'),array('pass'=>array('book_title')));
+	
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */
