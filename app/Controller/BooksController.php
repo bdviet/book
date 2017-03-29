@@ -58,7 +58,7 @@ class BooksController extends AppController {
 						'conditions' => 'BookWriter.writer_id = Writer.id'
 						)
 					),
-				'limit'=>5
+				'limit'=>8
 				);
 			$books = $this->paginate('Book');
 			//$books = $this->Book->find('all',);
@@ -75,6 +75,7 @@ class BooksController extends AppController {
 			$this->Session->delete('search_validation');
 		}
 		$this->set('notfound',$notfound);
+		$this->set('title_for_layout', 'Tìm kiếm - ChickenRainShop');
 	}
 
 /**

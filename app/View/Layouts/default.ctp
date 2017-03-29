@@ -5,14 +5,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="">
 	<meta name="author" content="">
-
+	
 	<title>
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php echo $this->Html->meta('icon'); ?>
 	<!-- Bootstrap core CSS -->
 	<?php echo $this->Html->css('bootstrap'); ?>
-	
+	<!-- ChickenRainShop - ChickenRain.com -->
 	<?php echo $this->Html->css('book'); ?>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -33,7 +33,7 @@
   
   <!-- Header -->
   	<div id="header">
- 
+  		<!-- Main Menu - ChickenRain.com -->
 	  <div class="navbar mainmenu">
 	    <div class="container">
 	      <a class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
@@ -41,7 +41,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </a>
-	      <a class="navbar-brand" href="./">BookShop</a>
+	      <a class="navbar-brand" href="/book">BookShop</a>
 	      <div class="nav-collapse collapse">
 	        <ul class="nav navbar-nav">
 	          <li class="active"><?php echo $this->Html->link('Sách mới','/sach-moi'); ?></li>
@@ -66,7 +66,7 @@
   	<div class="row">
   		<!-- content -->
 	  	<div class="content col col-lg-9">
-	  		<?php echo $this->Session->flash(); ?>
+	  		
 	  		<?php echo $this->fetch('content'); ?>
 	  	</div> <!-- end content -->
 	  	
@@ -105,10 +105,10 @@
 </div>
 
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.js"></script>
+<?php echo $this->Html->script('jquery'); ?>
+<?php echo $this->Html->script('bootstrap'); ?>
 
-
+<?php echo $this->element('sql_dump'); ?>
 
 </body>
 </html>
