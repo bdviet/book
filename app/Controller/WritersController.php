@@ -13,7 +13,14 @@ class WritersController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Writer->recursive = 0;
+		//$this->Writer->recursive = 0;
+		$this->paginate = array(
+			'fields' => array('name','slug'),
+			'recursive' => -1,
+			'order' => array('name'=>'asc'),
+			'limit' => 5,
+			'paramType'=>'querystring'
+			);
 		$this->set('writers', $this->paginate());
 	}
 
@@ -38,7 +45,7 @@ class WritersController extends AppController {
 		$this->paginate = array(
 			'fields' => array('id','title','slug','image','sale_price'),
 			'order' => array('created'=>'desc'),
-			'limit' => 5,
+			'limit' => 8,
 			'contain' => array(
 				'Writer' => array('name','slug')
 				),
@@ -62,6 +69,7 @@ class WritersController extends AppController {
 			);
 		$books = $this->paginate('Book');
 		$this->set('books',$books);
+		$this->set('title_for_layout', 'Tác Giả - '.$writer['Writer']['name']);
 	}
 
 /**

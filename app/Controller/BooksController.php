@@ -11,7 +11,6 @@ class BooksController extends AppController {
 		'order' => array('created'=>'desc'),
 		'limit' => 5
 		);
-
 /**
  * Hàm xử lý get_keyword
  */
@@ -29,7 +28,7 @@ class BooksController extends AppController {
 	}
 
 /**
- * tìm kiếm sách
+ * tìm kiếm sách trên chickenrainshop
  */	
 	public function search(){
 		$notfound = false;
@@ -78,7 +77,6 @@ class BooksController extends AppController {
 		$this->set('notfound',$notfound);
 	}
 
-
 /**
  * index method
  * hiển thị 10 quyển sách mới nhất trên trang chủ
@@ -89,6 +87,7 @@ class BooksController extends AppController {
 		//$this->set('books', $this->paginate());
 		$books = $this->Book->latest();
 		$this->set('books',$books);
+		$this->set('title_for_layout','Home - ChickenRainShop');
 	}
 /**
  * latest_books method
@@ -99,7 +98,7 @@ class BooksController extends AppController {
 		$this->paginate = array(
 			'fields' => array('id','title','slug','image','sale_price'),
 			'order' => array('created'=>'desc'),
-			'limit' => 5,
+			'limit' => 8,
 			'contain' => array(
 				'Writer' => array('name','slug')
 				),
@@ -108,6 +107,7 @@ class BooksController extends AppController {
 			);
 		$books = $this->paginate();
 		$this->set('books',$books);
+		$this->set('title_for_layout', 'Sách mới - ChickenRainShop');
 	}
 
 /**
@@ -171,6 +171,10 @@ class BooksController extends AppController {
 
 	}
 
+	/**
+	 * update comment_count trong books
+	 */
+	/*
 	public function update_comment(){
 		$books = $this->Book->find('all',array(
 			'fields'=>'id',
@@ -186,7 +190,7 @@ class BooksController extends AppController {
 					);
 			}
 		}
-	}
+	}*/
 
 /**
  * add method

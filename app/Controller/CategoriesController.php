@@ -4,7 +4,6 @@ App::uses('AppController', 'Controller');
  * Categories Controller
  *
  * @property Category $Category
- * @property PaginatorComponent $Paginator
  */
 class CategoriesController extends AppController {
 
@@ -20,13 +19,6 @@ class CategoriesController extends AppController {
 			return $categories;
 		}
 	}
-
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
 
 /**
  * index method
@@ -84,10 +76,10 @@ class CategoriesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Category->create();
 			if ($this->Category->save($this->request->data)) {
-				$this->Flash->success(__('The category has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The category has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The category could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The category could not be saved. Please, try again.'));
 			}
 		}
 	}
@@ -103,12 +95,12 @@ class CategoriesController extends AppController {
 		if (!$this->Category->exists($id)) {
 			throw new NotFoundException(__('Invalid category'));
 		}
-		if ($this->request->is(array('post', 'put'))) {
+		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Category->save($this->request->data)) {
-				$this->Flash->success(__('The category has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The category has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The category could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The category could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Category.' . $this->Category->primaryKey => $id));
@@ -128,12 +120,12 @@ class CategoriesController extends AppController {
 		if (!$this->Category->exists()) {
 			throw new NotFoundException(__('Invalid category'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->onlyAllow('post', 'delete');
 		if ($this->Category->delete()) {
-			$this->Flash->success(__('The category has been deleted.'));
-		} else {
-			$this->Flash->error(__('The category could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('Category deleted'));
+			$this->redirect(array('action' => 'index'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		$this->Session->setFlash(__('Category was not deleted'));
+		$this->redirect(array('action' => 'index'));
 	}
 }
