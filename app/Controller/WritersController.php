@@ -4,16 +4,8 @@ App::uses('AppController', 'Controller');
  * Writers Controller
  *
  * @property Writer $Writer
- * @property PaginatorComponent $Paginator
  */
 class WritersController extends AppController {
-
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
 
 /**
  * index method
@@ -22,7 +14,7 @@ class WritersController extends AppController {
  */
 	public function index() {
 		$this->Writer->recursive = 0;
-		$this->set('writers', $this->Paginator->paginate());
+		$this->set('writers', $this->paginate());
 	}
 
 /**
@@ -32,12 +24,44 @@ class WritersController extends AppController {
  * @param string $id
  * @return void
  */
-	public function view($id = null) {
-		if (!$this->Writer->exists($id)) {
-			throw new NotFoundException(__('Invalid writer'));
+	public function view($slug = null) {
+		$options = array(
+			'conditions' => array('Writer.slug' => $slug),
+			'recursive' => -1
+			);
+		$writer = $this->Writer->find('first', $options);
+		if (empty($writer)) {
+			throw new NotFoundException(__('Không tìm thấy tác giả này.'));
 		}
-		$options = array('conditions' => array('Writer.' . $this->Writer->primaryKey => $id));
-		$this->set('writer', $this->Writer->find('first', $options));
+		$this->set('writer', $writer);
+		//phân trang dữ liệu books
+		$this->paginate = array(
+			'fields' => array('id','title','slug','image','sale_price'),
+			'order' => array('created'=>'desc'),
+			'limit' => 5,
+			'contain' => array(
+				'Writer' => array('name','slug')
+				),
+			'joins'=> array(
+				array(
+					'table' => 'books_writers',
+					'alias' => 'BookWriter',
+					'conditions' => 'BookWriter.book_id = Book.id'
+					),
+				array(
+					'table' => 'writers',
+					'alias' => 'Writer',
+					'conditions' => 'BookWriter.writer_id = Writer.id'
+					)
+				),
+			'conditions' => array(
+				'published' => 1,
+				'Writer.slug' => $slug
+				),
+			'paramType' => 'querystring'
+			);
+		$books = $this->paginate('Book');
+		$this->set('books',$books);
 	}
 
 /**
@@ -49,10 +73,10 @@ class WritersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Writer->create();
 			if ($this->Writer->save($this->request->data)) {
-				$this->Flash->success(__('The writer has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The writer has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The writer could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The writer could not be saved. Please, try again.'));
 			}
 		}
 		$books = $this->Writer->Book->find('list');
@@ -70,12 +94,12 @@ class WritersController extends AppController {
 		if (!$this->Writer->exists($id)) {
 			throw new NotFoundException(__('Invalid writer'));
 		}
-		if ($this->request->is(array('post', 'put'))) {
+		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Writer->save($this->request->data)) {
-				$this->Flash->success(__('The writer has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The writer has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The writer could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The writer could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Writer.' . $this->Writer->primaryKey => $id));
@@ -97,12 +121,12 @@ class WritersController extends AppController {
 		if (!$this->Writer->exists()) {
 			throw new NotFoundException(__('Invalid writer'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->onlyAllow('post', 'delete');
 		if ($this->Writer->delete()) {
-			$this->Flash->success(__('The writer has been deleted.'));
-		} else {
-			$this->Flash->error(__('The writer could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('Writer deleted'));
+			$this->redirect(array('action' => 'index'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		$this->Session->setFlash(__('Writer was not deleted'));
+		$this->redirect(array('action' => 'index'));
 	}
 }

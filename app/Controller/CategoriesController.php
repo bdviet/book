@@ -9,6 +9,19 @@ App::uses('AppController', 'Controller');
 class CategoriesController extends AppController {
 
 /**
+ * Menu categories
+ */
+	public function menu(){
+		if($this->request->is('requested')){
+			$categories = $this->Category->find('all',array(
+			'recursive'=>-1,
+			'order' => array('name'=>'asc')
+			));
+			return $categories;
+		}
+	}
+
+/**
  * Components
  *
  * @var array
@@ -22,22 +35,44 @@ class CategoriesController extends AppController {
  */
 	public function index() {
 		$this->Category->recursive = 0;
-		$this->set('categories', $this->Paginator->paginate());
+		$this->set('categories', $this->paginate());
 	}
 
 /**
  * view method
- *
+ * Xem chi tiết một danh mục sách, 
+ * phân trang dữ liệu books của danh mục đang xem
  * @throws NotFoundException
- * @param string $id
+ * @param string $slug
  * @return void
  */
-	public function view($id = null) {
-		if (!$this->Category->exists($id)) {
-			throw new NotFoundException(__('Invalid category'));
+	public function view($slug = null) {
+		$options = array(
+			'conditions' => array('Category.slug' => $slug),
+			'recursive' => -1
+			);
+		$category = $this->Category->find('first', $options);
+		if (empty($category)) {
+			throw new NotFoundException(__('Không tìm thấy'));
 		}
-		$options = array('conditions' => array('Category.' . $this->Category->primaryKey => $id));
-		$this->set('category', $this->Category->find('first', $options));
+		$this->set('category', $category);
+		//phân trang dữ liệu books
+		$this->paginate = array(
+			'fields' => array('id','title','slug','image','sale_price'),
+			'order' => array('created'=>'desc'),
+			'limit' => 5,
+			'contain' => array(
+				'Writer' => array('name','slug'),
+				'Category'=> array('slug')
+				),
+			'conditions' => array(
+				'published' => 1,
+				'Category.slug' => $slug
+				),
+			'paramType' => 'querystring'
+			);
+		$books = $this->paginate('Book');
+		$this->set('books',$books);
 	}
 
 /**

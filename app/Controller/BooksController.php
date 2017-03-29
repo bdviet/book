@@ -53,13 +53,54 @@ class BooksController extends AppController {
 		$options = array(
 			'conditions' => array(
 				'Book.slug' => $slug
-			));
+			),
+			'contain' => array(
+				'Writer'=>array('name','slug')
+				),
+			);
 		$book = $this->Book->find('first', $options);
 		//pr($book);
 		if (empty($book)) {
 			throw new NotFoundException(__('Không tìm thấy quyển sách này!'));
 		}
 		$this->set('book', $book);
+		//hiển thị comments
+		$this->loadModel('Comment');
+		$comments = $this->Comment->find('all',array(
+			'conditions' => array(
+				'book_id' => $book['Book']['id']
+				),
+			'order' => array('Comment.created'=>'asc'),
+			'contain' => array(
+				'User' => array('username')
+				)
+			));
+		//pr($comments);
+		$this->set('comments',$comments);
+		//hiển thị sách liên quan
+		$related_books = $this->Book->find('all',array(
+			'fields'=>array('title','image','sale_price','slug'),
+			'conditions' => array(
+				'category_id' => $book['Book']['category_id'],
+				'Book.id <>' => $book['Book']['id'],
+				'published' => 1
+				),
+			'limit' => 5,
+			'order'=> 'rand()',
+			'contain' => array(
+				'Writer'=> array('name','slug')
+				)
+			));
+		//pr($related_books);
+		$this->set('related_books',$related_books);
+		//báo lỗi xác thực dữ liệu khi gởi comment
+		if($this->Session->check('comment_errors')){
+			$errors = $this->Session->read('comment_errors');
+			$this->set('errors',$errors);
+			$this->Session->delete('comment_errors');
+		}
+
+
 	}
 
 /**

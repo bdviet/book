@@ -7,7 +7,7 @@ App::uses('AppModel', 'Model');
  * @property Book $Book
  */
 class Comment extends AppModel {
-
+	public $actsAs = array('Containable');
 /**
  * Validation rules
  *
@@ -35,18 +35,22 @@ class Comment extends AppModel {
 			),
 		),
 		'content' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
-				//'message' => 'Your custom message here',
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Nội dung nhận xét không được để trống.',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'minlength' => array(
+				'rule' => array('minLength',8),
+				'message' => 'Nội dung nhận xét phải có độ dài lớn hơn 8 ký tự'
+				)
 		),
 	);
 
-	// The Associations below have been created with all possible keys, those that are not needed can be removed
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
  * belongsTo associations
@@ -66,7 +70,8 @@ class Comment extends AppModel {
 			'foreignKey' => 'book_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
+			'counterCache' => true
 		)
 	);
 }

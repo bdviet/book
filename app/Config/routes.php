@@ -28,7 +28,28 @@
 	Router::connect('/',array('controller'=>'books','action'=>'index'));
 	Router::connect('/sach-moi',array('controller'=>'books','action'=>'latest_books'));
 	Router::connect('/tac-gia',array('controller'=>'writers','action'=>'index'));
-	Router::connect('/:book_title',array('controller'=>'books','action'=>'view'),array('pass'=>array('book_title')));
+	//Router::connect('/tac-gia/:name',array('controller'=>'writers','action'=>'view'),array('pass'=>array('name')));
+	//Router::connect('/tac-gia/*',array('controller'=>'writers','action'=>'view'));
+	//Router::connect('/:book_title',array('controller'=>'books','action'=>'view'),array('pass'=>array('book_title')));
+	//Router::connect('com',array('controller'=>'books','action'=>'view'),array('pass'=>array('book_title')));
+	//Router::connect('/danh-muc/:name',array('controller'=>'categories','action'=>'view'),array('pass'=>array('name')));
+	//Router::connect('/danh-muc/*',array('controller'=>'categories','action'=>'view'));
+	//////////////////////////////////////////////////////////////////////////////////
+	Router::connect('/dang-ky-tai-khoan',array('controller' =>'users','action'=>'add'));
+    Router::connect('/gio-hang',array('controller' =>'books','action'=>'view_cart'));
+    Router::connect('quen-mat-khau',array('controller' =>'users','action'=>'forgot_password'));
+    Router::connect('thay-doi-thong-tin',array('controller' =>'users','action'=>'edit'));
+    Router::connect('thay-doi-mat-khau',array('controller' =>'users','action'=>'change_password'));
+    Router::connect('/',array('controller' =>'books','action'=>'index'));
+    Router::connect('/dang-nhap',array('controller' =>'users','action'=>'login'));
+    Router::connect('/dang-xuat',array('controller' =>'users','action'=>'logout'));
+    Router::connect('/sach-moi',array('controller'=>'books','action'=>'latest_books'));
+    Router::connect('/tac-gia',array('controller'=>'writers','action'=>'index'));
+    //Router::connect('/tac-gia/*',array('controller'=>'writers','action'=>'view'));
+    Router::connect('/tac-gia/:slug',array('controller'=>'writers','action'=>'view'),array('pass'=>array('slug'))); 
+    Router::connect('/danh-muc',array('controller'=>'categories','action'=>'index'));
+    Router::connect('/danh-muc/:slug',array('controller'=>'categories','action'=>'view'),array('pass'=>array('slug'))); 
+    Router::connect('/:book_title',array('controller'=>'books','action'=>'view'),array('pass'=>array('book_title')));
 	
 /**
  * ...and connect the rest of 'Pages' controller's URLs.

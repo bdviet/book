@@ -56,10 +56,10 @@ class Validation {
  * @deprecated 2.7.0 Use Validation::notBlank() instead.
  * @see Validation::notBlank()
  */
-	public static function notEmpty($check) {
-		trigger_error('Validation::notEmpty() is deprecated. Use Validation::notBlank() instead.', E_USER_DEPRECATED);
-		return static::notBlank($check);
-	}
+	// public static function notEmpty($check) {
+	// 	trigger_error('Validation::notEmpty() is deprecated. Use Validation::notBlank() instead.', E_USER_DEPRECATED);
+	// 	return static::notBlank($check);
+	// }
 
 /**
  * Checks that a string contains something other than whitespace
@@ -72,7 +72,7 @@ class Validation {
  * @param string|array $check Value to check
  * @return bool Success
  */
-	public static function notBlank($check) {
+	public static function notEmpty($check) {
 		if (!is_scalar($check)) {
 			return false;
 		}

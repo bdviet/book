@@ -4,16 +4,8 @@ App::uses('AppController', 'Controller');
  * Comments Controller
  *
  * @property Comment $Comment
- * @property PaginatorComponent $Paginator
  */
 class CommentsController extends AppController {
-
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
 
 /**
  * index method
@@ -22,7 +14,7 @@ class CommentsController extends AppController {
  */
 	public function index() {
 		$this->Comment->recursive = 0;
-		$this->set('comments', $this->Paginator->paginate());
+		$this->set('comments', $this->paginate());
 	}
 
 /**
@@ -42,22 +34,28 @@ class CommentsController extends AppController {
 
 /**
  * add method
- *
+ * gởi comment trên chickenrainshop
  * @return void
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->Comment->create();
-			if ($this->Comment->save($this->request->data)) {
-				$this->Flash->success(__('The comment has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Flash->error(__('The comment could not be saved. Please, try again.'));
+			$this->Comment->set($this->request->data);
+			if($this->Comment->validates()){
+				$this->Comment->create();
+				if ($this->Comment->save($this->request->data)) {
+					$this->Session->setFlash(__('Đã gởi nhận xét!'));
+					//$this->redirect(array('action' => 'index'));
+					
+				} else {
+					$this->Session->setFlash(__('Chưa gởi được, vui lòng thử lại'));
+				}		
 			}
+			else{
+				$comment_errors = $this->Comment->validationErrors;
+				$this->Session->write('comment_errors',$comment_errors);
+			}
+			$this->redirect($this->referer());
 		}
-		$users = $this->Comment->User->find('list');
-		$books = $this->Comment->Book->find('list');
-		$this->set(compact('users', 'books'));
 	}
 
 /**
@@ -71,12 +69,12 @@ class CommentsController extends AppController {
 		if (!$this->Comment->exists($id)) {
 			throw new NotFoundException(__('Invalid comment'));
 		}
-		if ($this->request->is(array('post', 'put'))) {
+		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Comment->save($this->request->data)) {
-				$this->Flash->success(__('The comment has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The comment has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The comment could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The comment could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Comment.' . $this->Comment->primaryKey => $id));
@@ -99,12 +97,12 @@ class CommentsController extends AppController {
 		if (!$this->Comment->exists()) {
 			throw new NotFoundException(__('Invalid comment'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->onlyAllow('post', 'delete');
 		if ($this->Comment->delete()) {
-			$this->Flash->success(__('The comment has been deleted.'));
-		} else {
-			$this->Flash->error(__('The comment could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('Comment deleted'));
+			$this->redirect(array('action' => 'index'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		$this->Session->setFlash(__('Comment was not deleted'));
+		$this->redirect(array('action' => 'index'));
 	}
 }
