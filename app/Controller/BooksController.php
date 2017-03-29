@@ -11,6 +11,74 @@ class BooksController extends AppController {
 		'order' => array('created'=>'desc'),
 		'limit' => 5
 		);
+
+/**
+ * Hàm xử lý get_keyword
+ */
+	public function get_keyword(){
+		if($this->request->is('post')){
+			$this->Book->set($this->request->data);
+			if($this->Book->validates()){
+				$keyword = $this->request->data['Book']['keyword'];
+			}else{
+				$errors = $this->Book->validationErrors;
+				$this->Session->write('search_validation',$errors);
+			}
+			$this->redirect(array('action'=>'search','keyword'=>$keyword));
+		}
+	}
+
+/**
+ * tìm kiếm sách
+ */	
+	public function search(){
+		$notfound = false;
+		//pr($this->request->params);
+		//pr($this->passedArgs);
+		if(!empty($this->request->params['named']['keyword'])){
+			$keyword = $this->request->params['named']['keyword'];
+			$this->paginate = array(
+				'fields' => array('title','image','sale_price','slug'),
+				'contain' => array('Writer.name','Writer.slug'),
+				'order' => array('Book.created'=>'desc'),
+				'conditions'=> array(
+					'Book.published' => 1,
+					'or'=>array(
+						'title like' => '%'.$keyword.'%',
+						'Writer.name like' => '%'.$keyword.'%',)
+					),
+				'joins' => array(
+					array(
+						'table' => 'books_writers',
+						'alias' => 'BookWriter',
+						'conditions' => 'BookWriter.book_id = Book.id'
+						),
+					array(
+						'table' => 'writers',
+						'alias' => 'Writer',
+						'conditions' => 'BookWriter.writer_id = Writer.id'
+						)
+					),
+				'limit'=>5
+				);
+			$books = $this->paginate('Book');
+			//$books = $this->Book->find('all',);
+			//pr($books);
+			if(!empty($books)){
+				$this->set('results',$books);
+			}else{
+				$notfound = true;
+			}
+			$this->set('keyword',$keyword);
+		}
+		if($this->Session->check('search_validation')){
+			$this->set('errors',$this->Session->read('search_validation'));
+			$this->Session->delete('search_validation');
+		}
+		$this->set('notfound',$notfound);
+	}
+
+
 /**
  * index method
  * hiển thị 10 quyển sách mới nhất trên trang chủ
@@ -101,6 +169,23 @@ class BooksController extends AppController {
 		}
 
 
+	}
+
+	public function update_comment(){
+		$books = $this->Book->find('all',array(
+			'fields'=>'id',
+			'contain' => 'Comment'
+			));
+		//pr($books);
+		foreach ($books as $book) {
+			//echo count($book['Comment']).'<br>';
+			if(count($book['Comment'])>0){
+				$this->Book->updateAll(
+					array('comment_count'=>count($book['Comment'])),
+					array('Book.id'=>$book['Book']['id'])
+					);
+			}
+		}
 	}
 
 /**

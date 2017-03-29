@@ -71,7 +71,7 @@ class Comment extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
-			'counterCache' => true
+			'counterCache' => true //enable counter cache
 		)
 	);
 }
