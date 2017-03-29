@@ -26,12 +26,13 @@
 				            <td class="row">
 				            	<?php echo $this->Form->create('Book', array('class'=>"form-inline")); ?>
 								  <?php echo $this->Form->input('quantity', array('value'=>$book['quantity'], 'class'=>"col col-lg-2", 'label'=>false, 'div'=> false)); ?>
-								  <?php echo $this->Form->button('Cập nhật', array('type'=>"submit", 'class'=>"btn btn-link")); ?>										  
+								  <?php echo $this->Form->button('Cập nhật', array('value'=>$book['quantity'],'type'=>"submit", 'class'=>"btn btn-link")); ?>										  
 								<?php echo $this->Form->end(); ?>
 				            </td>
 				            <td><?php echo $this->Number->currency($book['sale_price'], ' VND', array('places'=>0, 'wholePosition'=> 'after')); ?></td>
 				            <td>
-				            	<a href="#"><i class="glyphicon glyphicon-remove"></i></a>
+				            	<a href="#"></a>
+				            	<?php echo $this->Form->postLink('<i class="glyphicon glyphicon-remove"></i>', '/books/remove/'.$book['id'], array('escape'=>false)); ?>
 				            </td>
 				          </tr>
 		        	<?php endforeach ?>

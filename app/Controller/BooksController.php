@@ -12,13 +12,6 @@ class BooksController extends AppController {
 		'limit' => 5
 		);
 	
-/*private function sum($cart){
-		$total = 0;
-		foreach ($cart as $book) {
-			$total += $book['quantity']*$book['sale_price'];
-		}
-		return $total;
-	}*/
 
 /**
  * add_to_cart
@@ -49,7 +42,6 @@ class BooksController extends AppController {
 
 			//tính tổng giá trị của giỏ hàng
 			$cart = $this->Session->read('cart');
-			//$this->sum($cart);
 			$total = $this->Tool->array_sum($cart, 'quantity', 'sale_price');
 			$this->Session->write('payment.total', $total);
 
@@ -66,6 +58,33 @@ class BooksController extends AppController {
 		$payment = $this->Session->read('payment');
 		$this->set(compact('cart','payment'));
 		$this->set('title_for_layout', 'Giỏ hàng - ChickenRainShop');
+	}
+
+/**
+ *  Làm rỗng giỏ hàng
+ */
+	public function empty_cart(){
+		if($this->request->is('post')){
+			$this->Session->delete('cart');
+			$this->Session->delete('payment');
+			$this->redirect($this->referer());
+		}
+	}
+/**
+ *  Xóa từng quyển sách ra khỏi giỏ hàng
+ */
+	public function remove($id = null){
+		if($this->request->is('post')){
+			$this->Session->delete('cart.'.$id);
+			$cart = $this->Session->read('cart');
+			if(empty($cart)){
+				$this->empty_cart();
+			}else{
+				$total = $this->Tool->array_sum($cart, 'quantity', 'sale_price');
+				$this->Session->write('payment.total', $total);
+			}
+			$this->redirect($this->referer());
+		}
 	}
 
 /**
