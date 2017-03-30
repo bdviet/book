@@ -102,36 +102,44 @@
 	<?php if (true): ?>
 		<?php echo $this->Session->flash('order'); ?>
 		<?php echo $this->Form->create('Order', array('url'=>'/orders/checkout','class'=>"form-horizontal", 'inputDefaults'=> array('label'=>false))); ?>
-		  <div class="row">
+		Thông tin bắt buộc:
+		 <div class="row">
 		    <?php echo $this->Form->label('name', 'Tên', array('class'=>"col col-lg-2 control-label")); ?>
 		    <div class="col col-lg-10">	      
-		      <?php echo $this->Form->input('name', array('placeholder'=>"Nhập tên")); ?>
+		      <?php echo $this->Form->input('name', array('placeholder'=>"Nhập tên",'required'=>	"required")); ?>
 		    </div>
 		  </div>
 		  <div class="row">
 		    <label for="inputEmail" class="col col-lg-2 control-label">Email</label>
 		    <div class="col col-lg-10">
-		      <?php echo $this->Form->input('email', array('placeholder'=>"Nhập email")); ?>
+		      <?php echo $this->Form->input('email', array('placeholder'=>"Nhập email",'required'=>"required")); ?>
 		    </div>
 		  </div>
 		  <div class="row">
 		    <label for="inputEmail" class="col col-lg-2 control-label">Địa chỉ</label>
 		    <div class="col col-lg-10">
-		      <?php echo $this->Form->input('address', array('placeholder'=>"Nhập địa chỉ")); ?>
+		      <?php echo $this->Form->input('address', array('placeholder'=>"Nhập địa chỉ",'required'=>"required")); ?>
 		    </div>
 		  </div>
 		  <div class="row">
 		    <label for="inputEmail" class="col col-lg-2 control-label">Phone</label>
 		    <div class="col col-lg-10">
-		      <?php echo $this->Form->input('phone', array('placeholder'=>"Nhập số điện thoại")); ?>
+		      <?php echo $this->Form->input('phone', array('placeholder'=>"Nhập số điện thoại",'required'=>"required")); ?>
 		    </div>
 		  </div>
-		  <div class="row">
-		    <div class="col col-lg-10 col-offset-2">
-		      <?php echo $this->Form->button('Thực hiện thanh toán', array('type'=>"submit", 'class'=>"btn btn-primary pull-right")); ?>
-		    </div>
+	  	<div class="row">
+	    <div class="col col-lg-10 col-offset-2">
+	    <button onclick="myFunction()" type="submit" class="btn btn-primary pull-right">Thực Hiện Thanh toán</button>
+	    
+	    </div>
 		  </div>
+
 		<?php echo $this->Form->end(); ?>
+		 <!-- <script>
+				function myFunction() {
+		   		alert("Đơn hàng bạn sẽ được chuyển đến người quản lý, bạn chắc chắc chưa?");
+				}
+		</script> -->
 	<?php else: ?>
 		Bạn phải đăng nhập trước khi thanh toán!
 	<?php endif ?>
@@ -139,7 +147,9 @@
 
 	<!-- checkout button -->
 <?php else: ?>
+
 	<div class="panel">
+		<h3 style="text-align: center;">Đã gửi thành công.</h3>
 		Giỏ hàng đang rỗng.
 		Quay về <?php echo $this->Html->link('trang chủ', '/'); ?> để thêm quyển sách vào giỏ hàng.
 	</div>

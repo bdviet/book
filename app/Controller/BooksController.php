@@ -27,10 +27,16 @@ class BooksController extends AppController {
 			$this->Session->write('payment.pay', $pay);
 		}
 	}
+
+
+	public function lienhe (){
+	
+	}
 /**
  * add_to_cart
  * Thêm sách vào giỏ hàng
  */	
+
 	public function add_to_cart($id = null){
 		if($this->request->is('post')){
 			//tìm thông tin về sản phẩm
