@@ -6,7 +6,6 @@ App::uses('AppModel', 'Model');
  * @property User $User
  */
 class Order extends AppModel {
-
 /**
  * Validation rules
  *
@@ -25,7 +24,7 @@ class Order extends AppModel {
 		),
 		'customer_info' => array(
 			'notBlank' => array(
-				'rule' => array('maxLength', 25),
+				 'rule' => array('minlength', 2)
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -35,7 +34,7 @@ class Order extends AppModel {
 		),
 		'order_info' => array(
 			'notBlank' => array(
-				'rule' => array('maxLength', 25),
+				 'rule' => array('minlength', 2)
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -45,7 +44,7 @@ class Order extends AppModel {
 		),
 		'payment_info' => array(
 			'notBlank' => array(
-				'rule' => array('maxLength', 25),
+				 'rule' => array('minlength', 2)
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -54,9 +53,7 @@ class Order extends AppModel {
 			),
 		),
 	);
-
 	// The Associations below have been created with all possible keys, those that are not needed can be removed
-
 /**
  * belongsTo associations
  *
