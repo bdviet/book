@@ -25,7 +25,7 @@ class Order extends AppModel {
 		),
 		'customer_info' => array(
 			'notBlank' => array(
-				'rule' => array('notBlank'),
+				'rule' => array('maxLength', 25),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -35,7 +35,7 @@ class Order extends AppModel {
 		),
 		'order_info' => array(
 			'notBlank' => array(
-				'rule' => array('notBlank'),
+				'rule' => array('maxLength', 25),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -45,7 +45,7 @@ class Order extends AppModel {
 		),
 		'payment_info' => array(
 			'notBlank' => array(
-				'rule' => array('notBlank'),
+				'rule' => array('maxLength', 25),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,

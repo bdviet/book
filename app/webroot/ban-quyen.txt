@@ -1,11 +1,11 @@
 ﻿Giao diện được phát triển trên Twitter Bootstrap 3 RC nên có nhiều điểm chưa hoạt đúng như khi bản cuối cùng.
 Bạn có quyền:
-- Sử dụng giao diện để thực hành trong khóa CakePHP Nâng Cao tại ChickenRain.com
+- Sử dụng giao diện để thực hành trong khóa CakePHP Nâng Cao tại Sách cũ Huế
 
 Bạn không có quyền:
 - Sử dụng hoàn toàn giao diện hay lấy một phần từ giao diện để ứng dụng vào website dự án nào khác.
 - Sửa đổi giao diện và sử dụng giao diện vào website dự án nào khác.
 
-Giao diện thuộc toàn quyền sở hữu của ChickenRain.com
+Giao diện thuộc toàn quyền sở hữu của Sách cũ Huế
 
-Nếu có thắc mắc bạn hãy gửi email về: hi@chickenrain.com
+Nếu có thắc mắc bạn hãy gửi email về: hi@Sách cũ Huế

@@ -4,16 +4,30 @@ App::uses('AppController', 'Controller');
  * Orders Controller
  *
  * @property Order $Order
- * @property PaginatorComponent $Paginator
  */
 class OrdersController extends AppController {
 
 /**
- * Components
- *
- * @var array
+ * thanh toán đơn hàng và lưu thông tin mua hàng
  */
-	public $components = array('Paginator');
+	public function checkout(){
+		if($this->request->is('post')){
+			$data = array(
+				'user_id'=>1,
+				'order_info'=> json_encode($this->Session->read('cart')),
+				'customer_info'=> json_encode($this->request->data['Order']),
+				'payment_info' => json_encode($this->Session->read('payment')),
+				'status'=>0
+				);
+			if($this->Order->saveAll($data)){
+				$this->Session->delete('cart');
+				$this->Session->delete('payment');
+			}else{
+				$this->Session->setFlash('Thanh toán không thực hiện được!', 'default', array('class'=> 'alert alert-danger'), 'order');
+			}
+			$this->redirect($this->referer());
+		}
+	}
 
 /**
  * index method
@@ -22,7 +36,7 @@ class OrdersController extends AppController {
  */
 	public function index() {
 		$this->Order->recursive = 0;
-		$this->set('orders', $this->Paginator->paginate());
+		$this->set('orders', $this->paginate());
 	}
 
 /**
@@ -49,10 +63,10 @@ class OrdersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Order->create();
 			if ($this->Order->save($this->request->data)) {
-				$this->Flash->success(__('The order has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The order has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The order could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The order could not be saved. Please, try again.'));
 			}
 		}
 		$users = $this->Order->User->find('list');
@@ -70,12 +84,12 @@ class OrdersController extends AppController {
 		if (!$this->Order->exists($id)) {
 			throw new NotFoundException(__('Invalid order'));
 		}
-		if ($this->request->is(array('post', 'put'))) {
+		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Order->save($this->request->data)) {
-				$this->Flash->success(__('The order has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The order has been saved'));
+				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The order could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The order could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
@@ -97,12 +111,12 @@ class OrdersController extends AppController {
 		if (!$this->Order->exists()) {
 			throw new NotFoundException(__('Invalid order'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->onlyAllow('post', 'delete');
 		if ($this->Order->delete()) {
-			$this->Flash->success(__('The order has been deleted.'));
-		} else {
-			$this->Flash->error(__('The order could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('Order deleted'));
+			$this->redirect(array('action' => 'index'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		$this->Session->setFlash(__('Order was not deleted'));
+		$this->redirect(array('action' => 'index'));
 	}
 }

@@ -34,7 +34,7 @@ class CommentsController extends AppController {
 
 /**
  * add method
- * gởi comment trên chickenrainshop
+ * gởi comment trên Sách cũ Huế
  * @return void
  */
 	public function add() {

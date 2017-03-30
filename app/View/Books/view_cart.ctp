@@ -84,7 +84,7 @@
 			Bạn đã nhập mã giảm giá!
 		<?php else: ?>
 			<?php echo $this->Form->create('Coupon', array('url'=> '/coupons/add', 'class'=>"form-inline")); ?>
-				<?php echo $this->Form->input('code', array('class'=>"col-lg-3", 'placeholder'=>"Nhập mã giảm giá (coupon)", 'label'=> false, 'div'=> false)); ?>			
+				<?php echo $this->Form->input('code', array('class'=>"col-lg-9", 'placeholder'=>"Nhập mã giảm giá (coupon)", 'label'=> false, 'div'=> false)); ?>			
 				<?php echo $this->Form->button('Nhập', array('type'=>"submit", 'class'=>"col-lg-2 btn btn-primary")); ?>
 			<?php echo $this->Form->end(); ?>
 			<h4>Ghi chú:</h4>
@@ -99,38 +99,42 @@
 	<!-- customer info -->
 	<div class="panel panel-info col col-lg-7 col-offset-1">
 	<h4 class="panel-heading"><i class="glyphicon glyphicon-user"></i> Thanh toán đơn hàng</h4>
-	<form class="form-horizontal">
-	  <div class="row">
-	    <label for="inputEmail" class="col col-lg-2 control-label">Tên</label>
-	    <div class="col col-lg-10">
-	      <input type="text" id="inputEmail" placeholder="Nhập tên">
-	    </div>
-	  </div>
-	  <div class="row">
-	    <label for="inputEmail" class="col col-lg-2 control-label">Email</label>
-	    <div class="col col-lg-10">
-	      <input type="text" id="inputEmail" placeholder="Nhập email">
-	    </div>
-	  </div>
-	  <div class="row">
-	    <label for="inputEmail" class="col col-lg-2 control-label">Địa chỉ</label>
-	    <div class="col col-lg-10">
-	      <input type="text" id="inputEmail" placeholder="Nhập địa chỉ">
-	    </div>
-	  </div>
-	  <div class="row">
-	    <label for="inputEmail" class="col col-lg-2 control-label">Phone</label>
-	    <div class="col col-lg-10">
-	      <input type="text" id="inputEmail" placeholder="Nhập số điện thoại">
-	    </div>
-	  </div>
-	  <div class="row">
-	    <div class="col col-lg-10 col-offset-2">
-	      <button type="submit" class="btn btn-primary pull-right">Thực Hiện Thanh toán</button>
-	    </div>
-	  </div>
-	</form>
-
+	<?php if (true): ?>
+		<?php echo $this->Session->flash('order'); ?>
+		<?php echo $this->Form->create('Order', array('url'=>'/orders/checkout','class'=>"form-horizontal", 'inputDefaults'=> array('label'=>false))); ?>
+		  <div class="row">
+		    <?php echo $this->Form->label('name', 'Tên', array('class'=>"col col-lg-2 control-label")); ?>
+		    <div class="col col-lg-10">	      
+		      <?php echo $this->Form->input('name', array('placeholder'=>"Nhập tên")); ?>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <label for="inputEmail" class="col col-lg-2 control-label">Email</label>
+		    <div class="col col-lg-10">
+		      <?php echo $this->Form->input('email', array('placeholder'=>"Nhập email")); ?>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <label for="inputEmail" class="col col-lg-2 control-label">Địa chỉ</label>
+		    <div class="col col-lg-10">
+		      <?php echo $this->Form->input('address', array('placeholder'=>"Nhập địa chỉ")); ?>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <label for="inputEmail" class="col col-lg-2 control-label">Phone</label>
+		    <div class="col col-lg-10">
+		      <?php echo $this->Form->input('phone', array('placeholder'=>"Nhập số điện thoại")); ?>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="col col-lg-10 col-offset-2">
+		      <?php echo $this->Form->button('Thực hiện thanh toán', array('type'=>"submit", 'class'=>"btn btn-primary pull-right")); ?>
+		    </div>
+		  </div>
+		<?php echo $this->Form->end(); ?>
+	<?php else: ?>
+		Bạn phải đăng nhập trước khi thanh toán!
+	<?php endif ?>
 	</div>
 
 	<!-- checkout button -->
